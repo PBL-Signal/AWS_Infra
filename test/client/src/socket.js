@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:5000";
+const URL = "http://44.208.11.16:3000";
 const socket = io(URL, { autoConnect: false });
 
 socket.onAny((event, ...args) => {

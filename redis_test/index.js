@@ -26,7 +26,14 @@ client.on("connect", function () {
   console.log("connected");
 });
 
-//await redis_client.connect();
+//check the functioning
+client.set("framework", "AngularJS", function (err, reply) {
+  console.log("redis.set " , reply);
+});
+
+client.get("framework", function (err, reply) {
+  console.log("redis.get ", reply);
+});
 
 
 

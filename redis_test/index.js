@@ -12,10 +12,7 @@ redis_client.on("error", (err) => {
   console.error(err);
 });
 
-redis_client.on("ready", ()=> {
-  console.log("Redis is Ready");
-});
-redis_client.set("hello", "Node.js");
+redis_client.on('connect', () => console.log('Connected to Redis!'));
 
 
 

@@ -10,12 +10,16 @@ const { createCluster }= require('redis');
 //const redis_client = redis.createClient(6379,'redis-test.i187of.ng.0001.use1.cache.amazonaws.com');
 // Redis
 
-const client = createCluster({
+const client2 = createCluster({
   rootNodes: [
     {
       url: 'redis://redis-test.i187of.ng.0001.use1.cache.amazonaws.com:6379'
     }
   ]
+});
+
+var client = require('redis').createClient(6379, 'redis-test.i187of.ng.0001.use1.cache.amazonaws.com:6379', {
+  no_ready_check: true
 });
 
 client.on("error", (err) => {

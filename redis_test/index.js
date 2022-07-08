@@ -12,3 +12,10 @@ redis_client.on("error", (err) => {
 redis_client.on("ready", ()=> {
   console.log("Redis is Ready");
 });
+
+const set_cache = ( key, value ) => {
+  redis_client.set( key, value );
+  console.log('Redis set Data',key);
+}
+
+set_cache("test", "mini");

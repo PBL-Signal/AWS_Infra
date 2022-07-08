@@ -5,22 +5,32 @@ const express = require("express");
 const app = express();
 
 const redis = require('redis');
+const { createCluster }= require('redis');
 
-const redis_client = redis.createClient(6379,'redis-test.i187of.ng.0001.use1.cache.amazonaws.com');
+//const redis_client = redis.createClient(6379,'redis-test.i187of.ng.0001.use1.cache.amazonaws.com');
 // Redis
-redis_client.on("error", (err) => {
+
+const client = createCluster({
+  rootNodes: [
+    {
+      url: 'redis://redis-test.i187of.ng.0001.use1.cache.amazonaws.com:6379'
+    }
+  ]
+});
+
+client.on("error", (err) => {
   console.error(err);
 });
 
-redis_client.on('connect', () => console.log('Connected to Redis!'));
-redis_client.connect();
+client.on("connect", function () {
+  console.log("connected");
+});
+
+//await redis_client.connect();
 
 
-//app.get("/", (req, res) => {
-  //res.send("Test");
-//});
 
 //3000번 포트로 서버를 오픈한다.
-app.listen(3000, () => {
-  console.log("Sever On");
-})
+//app.listen(3000, () => {
+  //console.log("Sever On");
+//})

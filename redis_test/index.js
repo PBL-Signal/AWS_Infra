@@ -17,10 +17,6 @@ redis_client.on("ready", ()=> {
 });
 redis_client.set("hello", "Node.js");
 
-redis_client.get("hello", function(err, val) {
-  console.log(val);
-  client.quit();
-});
 
 
 //app.get("/", (req, res) => {

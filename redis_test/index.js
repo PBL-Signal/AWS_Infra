@@ -40,5 +40,5 @@ const { setupWorker } = require("@socket.io/sticky");
 
 // Redis test 
 redisClient.set("test","userID1234");
-redisClient.call("JSON.SET", key, "$", JSON.stringify(schema));
+redisClient.call("JSON.SET", "mini", "$", JSON.stringify({"1":"test"}));
 setupWorker(io);

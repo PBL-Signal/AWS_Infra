@@ -5,31 +5,27 @@ const express = require("express");
 const app = express();
 
 const redis = require('redis');
-const redisInfo = {
-  host : 'redis-test.i187of.ng.0001.use1.cache.amazonaws.com',
-  port : 6379
-}
-const client = redis.createClient(redisInfo);
 
-client.on("error", function (err) {
-    console.log("Error " + err);
+const redis_client = redis.createClient(6379,'redis-test.i187of.ng.0001.use1.cache.amazonaws.com');
+// Redis
+redis_client.on("error", (err) => {
+  console.error(err);
 });
 
-client.on("ready", ()=> {
+redis_client.on("ready", ()=> {
   console.log("Redis is Ready");
 });
+//client.set("hello", "Node.js");
 
-client.set("hello", "Node.js");
-
-client.get("hello", function(err, val) {
-  console.log(val);
-  client.quit();
-});
+//client.get("hello", function(err, val) {
+  //console.log(val);
+  //client.quit();
+//});
 
 
-app.get("/", (req, res) => {
-  res.send("Test");
-});
+//app.get("/", (req, res) => {
+  //res.send("Test");
+//});
 
 //3000번 포트로 서버를 오픈한다.
 app.listen(3000, () => {

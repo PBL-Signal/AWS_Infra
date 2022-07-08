@@ -22,6 +22,7 @@ var client = require('redis').createClient(6379, 'redis-test.i187of.ng.0001.use1
   no_ready_check: true
 });
 
+await client.connect();
 client.on("error", (err) => {
   console.error(err);
 });

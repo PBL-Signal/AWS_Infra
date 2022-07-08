@@ -13,7 +13,7 @@ redis_client.on("error", (err) => {
 });
 
 redis_client.on('connect', () => console.log('Connected to Redis!'));
-
+redis_client.connect();
 
 
 //app.get("/", (req, res) => {

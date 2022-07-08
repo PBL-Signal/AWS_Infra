@@ -22,23 +22,27 @@ var client = require('redis').createClient(6379, 'redis-test.i187of.ng.0001.use1
   no_ready_check: true
 });
 
-await client.connect();
-client.on("error", (err) => {
-  console.error(err);
+client.connect().then(() => {
+  client.on("error", (err) => {
+    console.error(err);
+  });
+  
+  client.on("connect", function () {
+    console.log("connected");
+  });
+
+  
+  //check the functioning
+  client.set("framework", "AngularJS", function (err, reply) {
+    console.log("redis.set " , reply);
+  });
+
+  client.get("framework", function (err, reply) {
+    console.log("redis.get ", reply);
+  });
 });
 
-client.on("connect", function () {
-  console.log("connected");
-});
 
-//check the functioning
-client.set("framework", "AngularJS", function (err, reply) {
-  console.log("redis.set " , reply);
-});
-
-client.get("framework", function (err, reply) {
-  console.log("redis.get ", reply);
-});
 
 
 

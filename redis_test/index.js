@@ -18,7 +18,7 @@ const client2 = createCluster({
   ]
 });
 
-var client = require('redis').createClient(6379, 'redis-test.i187of.ng.0001.use1.cache.amazonaws.com:6379', {
+var client = require('redis').createClient(6379, 'redis-test.i187of.ng.0001.use1.cache.amazonaws.com', {
   no_ready_check: true
 });
 

@@ -15,12 +15,12 @@ redis_client.on("error", (err) => {
 redis_client.on("ready", ()=> {
   console.log("Redis is Ready");
 });
-//client.set("hello", "Node.js");
+redis_client.set("hello", "Node.js");
 
-//client.get("hello", function(err, val) {
-  //console.log(val);
-  //client.quit();
-//});
+redis_client.get("hello", function(err, val) {
+  console.log(val);
+  client.quit();
+});
 
 
 //app.get("/", (req, res) => {

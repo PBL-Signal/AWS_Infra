@@ -5,9 +5,14 @@ const { Socket } = require('dgram');
 const { stringify } = require('querystring');
 const config = require('./configure');
 
-const REDIS_PORT = 6380;
+const REDIS_PORT = 6379;
+const REDIS_URL = "redis-test.i187of.ng.0001.use1.cache.amazonaws.com"
 const Redis = require("ioredis"); 
-const redisClient = new Redis(REDIS_PORT);
+const redisClient = new Redis(REDIS_PORT, REDIS_URL);
+
+// const REDIS_PORT = 6380;
+// const Redis = require("ioredis"); 
+// const redisClient = new Redis(REDIS_PORT);
 const { RedisSessionStore } = require("./sessionStore");
 const sessionStore = new RedisSessionStore(redisClient);
 

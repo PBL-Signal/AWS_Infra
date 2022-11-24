@@ -12,6 +12,10 @@ const socketredis = require("socket.io-redis");
 const REDIS_PORT = 6379
 const REDIS_URL = "redis-test.i187of.ng.0001.use1.cache.amazonaws.com"
 const redisClient = new Redis(REDIS_PORT, REDIS_URL);
+
+const app = express();
+//const redisClient = new Redis(REDIS_PORT);
+const server = http.createServer(app);
 const io = socketio(server,{
     cors: {
         origin: "*",
@@ -20,9 +24,6 @@ const io = socketio(server,{
     transport: ["websocket"]
 });
 
-const app = express();
-//const redisClient = new Redis(REDIS_PORT);
-const server = http.createServer(app);
 
 // const io = socketio(server,{
 //     cors: {

@@ -47,7 +47,7 @@ const RoomInfo = require("./schemas/roomTotal/RoomInfo");
 
 // MongoDB관련
 const func = require('./server_functions/db_func');
-const {lobbyLogger, gameLogger, chattingLogger} = require('./logConfig'); 
+// const {lobbyLogger, gameLogger, chattingLogger} = require('./logConfig'); 
 
 // const os = require( 'os' );
 // const { emit } = require('process');
@@ -166,25 +166,25 @@ module.exports = (io) => {
             console.log('catch handler', error);
             });
             // console.log("connect: saveSession");
-            lobbyLogger.info('mainHome:login', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {status : 1} 
-            });
+            // lobbyLogger.info('mainHome:login', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {status : 1} 
+            // });
         }catch(error){
             console.log("ERROR! ", error);
             console.log("connect: saveSession");
-            lobbyLogger.error('mainHome:login', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {status : -1} 
-            });
+            // lobbyLogger.error('mainHome:login', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {status : -1} 
+            // });
         }
 
         console.log("connect: saveSession");
@@ -224,19 +224,19 @@ module.exports = (io) => {
 
             socket.emit('room permission',permission);
 
-            lobbyLogger.info('mainHome:enter_room', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {
-                    type : 'clickRoom', 
-                    roomID : socket.roomID,
-                    room : room,
-                    status : permission
-              },
-            });
+            // lobbyLogger.info('mainHome:enter_room', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {
+            //         type : 'clickRoom', 
+            //         roomID : socket.roomID,
+            //         room : room,
+            //         status : permission
+            //   },
+            // });
 
         });
 
@@ -277,38 +277,38 @@ module.exports = (io) => {
                 console.log("socket.room", socket.room, " socket.roomID ", socket.roomID );
                 socket.emit('enterPublicRoom');
 
-                lobbyLogger.info('mainHome:enter_room', {
-                    server : server_ip,
-                    userIP : '192.0.0.1',
-                    sessionID : socket.sessionID,
-                    userID : socket.userID,
-                    nickname : socket.nickname,
-                    data : {
-                        type : 'randomGameStart', 
-                        roomID : socket.roomID,
-                        room : roomPin,
-                        status : 1
-                  },
-                });
+                // lobbyLogger.info('mainHome:enter_room', {
+                //     server : server_ip,
+                //     userIP : '192.0.0.1',
+                //     sessionID : socket.sessionID,
+                //     userID : socket.userID,
+                //     nickname : socket.nickname,
+                //     data : {
+                //         type : 'randomGameStart', 
+                //         roomID : socket.roomID,
+                //         room : roomPin,
+                //         status : 1
+                //   },
+                // });
             }else {
                 // 경우 2
                 var room_info = await createRoom('public', config.DEFAULT_ROOM.maxPlayer);
                 
-                lobbyLogger.info('mainHome:create_room', {
-                    server : server_ip,
-                    userIP : '192.0.0.1',
-                    sessionID : socket.sessionID,
-                    userID : socket.userID,
-                    nickname : socket.nickname,
-                    data : {
-                        type : "randomGameStart",
-                        roomID : room_info.roomID,
-                        room : room_info.roomPin,
-                        roomType : room_info.roomType,
-                        maxPlayer : room_info.maxPlayer,
-                        status : 1
-                  },
-                });
+                // lobbyLogger.info('mainHome:create_room', {
+                //     server : server_ip,
+                //     userIP : '192.0.0.1',
+                //     sessionID : socket.sessionID,
+                //     userID : socket.userID,
+                //     nickname : socket.nickname,
+                //     data : {
+                //         type : "randomGameStart",
+                //         roomID : room_info.roomID,
+                //         room : room_info.roomPin,
+                //         roomType : room_info.roomType,
+                //         maxPlayer : room_info.maxPlayer,
+                //         status : 1
+                //   },
+                // });
 
                 console.log("succesCreateRoom roomPin: " , room_info.roomPin);
             }    
@@ -362,21 +362,21 @@ module.exports = (io) => {
                 roomPin: room_info.roomPin.toString()
             });
 
-            lobbyLogger.info('mainHome:create_room', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {
-                    type : "createRoom",
-                    roomID : room_info.roomID,
-                    room : room_info.roomPin,
-                    roomType : room_info.roomType,
-                    maxPlayer : room_info.maxPlayer,
-                    status : 1
-              },
-            });
+            // lobbyLogger.info('mainHome:create_room', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {
+            //         type : "createRoom",
+            //         roomID : room_info.roomID,
+            //         room : room_info.roomPin,
+            //         roomType : room_info.roomType,
+            //         maxPlayer : room_info.maxPlayer,
+            //         status : 1
+            //   },
+            // });
         
         });
 
@@ -468,24 +468,24 @@ module.exports = (io) => {
             socket.broadcast.to(room).emit('user joined', JSON.stringify(playerInfo));
 
 
-            lobbyLogger.info('waitingRoom:add_user', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        roomID : socket.roomID,
-                        room : room,
-                        team: playerInfo.team,
-                        color:playerInfo.color,
-                        place : playerInfo.place,
-                        status: playerInfo.status,
-                        userCnt : roomManageDict.userCnt,
-                        maxPlayer : roomManageDict.maxPlayer,
-                },
-            });
+            // lobbyLogger.info('waitingRoom:add_user', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             roomID : socket.roomID,
+            //             room : room,
+            //             team: playerInfo.team,
+            //             color:playerInfo.color,
+            //             place : playerInfo.place,
+            //             status: playerInfo.status,
+            //             userCnt : roomManageDict.userCnt,
+            //             maxPlayer : roomManageDict.maxPlayer,
+            //     },
+            // });
 
         });
         
@@ -526,42 +526,42 @@ module.exports = (io) => {
             console.log('check playerJson : ', playerJson);
             io.sockets.in(socket.room).emit('updateUI',playerJson);
 
-            lobbyLogger.info('waitingRoom:change_status', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        roomID : socket.roomID,
-                        room : socket.room,
-                        team: playerInfo.team,
-                        color:playerInfo.color,
-                        place : playerInfo.place,
-                        status: playerInfo.status,
-                        readyUserCnt: readyUserCnt
-                },
-            });
+            // lobbyLogger.info('waitingRoom:change_status', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             roomID : socket.roomID,
+            //             room : socket.room,
+            //             team: playerInfo.team,
+            //             color:playerInfo.color,
+            //             place : playerInfo.place,
+            //             status: playerInfo.status,
+            //             readyUserCnt: readyUserCnt
+            //     },
+            // });
 
             // 3. 만약 모두가 ready한 상태라면 자동 game start
            if(readyUserCnt == maxPlayer){
                 console.log("!모두 레디함!");
                 io.sockets.in(socket.room).emit('countGameStart');
 
-                lobbyLogger.info('waitingRoom:count_game_start ', {
-                    server : server_ip,
-                    userIP : '192.0.0.1',
-                    sessionID : socket.sessionID,
-                    userID : socket.userID,
-                    nickname : socket.nickname,
-                    data : 
-                        {
-                            readyUserCnt: readyUserCnt,
-                            roomID : socket.roomID,
-                            room : socket.room,
-                    },
-                });
+                // lobbyLogger.info('waitingRoom:count_game_start ', {
+                //     server : server_ip,
+                //     userIP : '192.0.0.1',
+                //     sessionID : socket.sessionID,
+                //     userID : socket.userID,
+                //     nickname : socket.nickname,
+                //     data : 
+                //         {
+                //             readyUserCnt: readyUserCnt,
+                //             roomID : socket.roomID,
+                //             room : socket.room,
+                //     },
+                // });
 
            }else{
               
@@ -611,22 +611,22 @@ module.exports = (io) => {
             io.sockets.in(socket.room).emit('updateUI',playerJson); // 모든 사람에게 뿌림
 
 
-            lobbyLogger.info('waitingRoom:change_profile', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        roomID : socket.roomID,
-                        room : socket.room,
-                        team: playerInfo.team,
-                        color:playerInfo.color,
-                        place : playerInfo.place,
-                        status: playerInfo.status
-                },
-            });
+            // lobbyLogger.info('waitingRoom:change_profile', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             roomID : socket.roomID,
+            //             room : socket.room,
+            //             team: playerInfo.team,
+            //             color:playerInfo.color,
+            //             place : playerInfo.place,
+            //             status: playerInfo.status
+            //     },
+            // });
         });  
 
 
@@ -677,23 +677,23 @@ module.exports = (io) => {
                 console.log('check : ', playerJson);
                 socket.broadcast.to(socket.room).emit('updateUI', playerJson);
 
-                lobbyLogger.info('waitingRoom:switch_team_off ', {
-                    server : server_ip,
-                    userIP : '192.0.0.1',
-                    sessionID : socket.sessionID,
-                    userID : socket.userID,
-                    nickname : socket.nickname,
-                    data : 
-                        {
-                            // detail : "teamChange Off",
-                            roomID : socket.roomID,
-                            room : socket.room,
-                            team: playerInfo.team,
-                            color:playerInfo.color,
-                            place : playerInfo.place,
-                            status: playerInfo.status
-                    },
-                });
+                // lobbyLogger.info('waitingRoom:switch_team_off ', {
+                //     server : server_ip,
+                //     userIP : '192.0.0.1',
+                //     sessionID : socket.sessionID,
+                //     userID : socket.userID,
+                //     nickname : socket.nickname,
+                //     data : 
+                //         {
+                //             // detail : "teamChange Off",
+                //             roomID : socket.roomID,
+                //             room : socket.room,
+                //             team: playerInfo.team,
+                //             color:playerInfo.color,
+                //             place : playerInfo.place,
+                //             status: playerInfo.status
+                //     },
+                // });
 
             }
             // 2이면 teamChange On
@@ -754,23 +754,23 @@ module.exports = (io) => {
                     console.log('check : ', teamChangeInfo);
                     io.sockets.in(socket.room).emit('updateTeamChange',teamChangeInfo);
 
-                    lobbyLogger.info('waitingRoom:switch_team_on1 ', {
-                        server : server_ip,
-                        userIP : '192.0.0.1',
-                        sessionID : socket.sessionID,
-                        userID : socket.userID,
-                        nickname : socket.nickname,
-                        data : 
-                            {
-                                // detail : "teamChange On1",
-                                roomID : socket.roomID,
-                                room : socket.room,
-                                team: playerInfo.team,
-                                color:playerInfo.color,
-                                place : playerInfo.place,
-                                status: playerInfo.status
-                        },
-                    });
+                    // lobbyLogger.info('waitingRoom:switch_team_on1 ', {
+                    //     server : server_ip,
+                    //     userIP : '192.0.0.1',
+                    //     sessionID : socket.sessionID,
+                    //     userID : socket.userID,
+                    //     nickname : socket.nickname,
+                    //     data : 
+                    //         {
+                    //             // detail : "teamChange On1",
+                    //             roomID : socket.roomID,
+                    //             room : socket.room,
+                    //             team: playerInfo.team,
+                    //             color:playerInfo.color,
+                    //             place : playerInfo.place,
+                    //             status: playerInfo.status
+                    //     },
+                    // });
                 }else{
 
                     // 경우 2 : full 상태라 1:1로 팀 change를 해야되는 상황 
@@ -821,23 +821,23 @@ module.exports = (io) => {
                         console.log("check mywaitingList : " , mywaitingList);
                         await hashtableStore.updateHashTableField(room, myWaitingField, mywaitingList.join(','), 'roomManage');
                         
-                        lobbyLogger.info('waitingRoom:switch_team_wait', {
-                            server : server_ip,
-                            userIP : '192.0.0.1',
-                            sessionID : socket.sessionID,
-                            userID : socket.userID,
-                            nickname : socket.nickname,
-                            data : 
-                                {
-                                    // detail : "teamChange Wait",
-                                    roomID : socket.roomID,
-                                    room : socket.room,
-                                    team: playerInfo.team,
-                                    color:playerInfo.color,
-                                    place : playerInfo.place,
-                                    status: playerInfo.status
-                            },
-                        });
+                        // lobbyLogger.info('waitingRoom:switch_team_wait', {
+                        //     server : server_ip,
+                        //     userIP : '192.0.0.1',
+                        //     sessionID : socket.sessionID,
+                        //     userID : socket.userID,
+                        //     nickname : socket.nickname,
+                        //     data : 
+                        //         {
+                        //             // detail : "teamChange Wait",
+                        //             roomID : socket.roomID,
+                        //             room : socket.room,
+                        //             team: playerInfo.team,
+                        //             color:playerInfo.color,
+                        //             place : playerInfo.place,
+                        //             status: playerInfo.status
+                        //     },
+                        // });
                     
                     }else{
                         // 맞교환 진행
@@ -880,23 +880,23 @@ module.exports = (io) => {
                         // 상대방 socketID로 1:1로 보냄 
                         io.to(matePlayerInfo.socketID).emit('onTeamChangeType2');
 
-                        lobbyLogger.info('waitingRoom:switch_team_on2_1 ', {
-                            server : server_ip,
-                            userIP : '192.0.0.1',
-                            sessionID : socket.sessionID,
-                            userID : socket.userID,
-                            nickname : socket.nickname,
-                            data : 
-                                {
-                                    // detail : "teamChange On2",
-                                    roomID : socket.roomID,
-                                    room : socket.room,
-                                    team: playerInfo.team,
-                                    color:playerInfo.color,
-                                    place : playerInfo.place,
-                                    status: playerInfo.status
-                            },
-                        });
+                        // lobbyLogger.info('waitingRoom:switch_team_on2_1 ', {
+                        //     server : server_ip,
+                        //     userIP : '192.0.0.1',
+                        //     sessionID : socket.sessionID,
+                        //     userID : socket.userID,
+                        //     nickname : socket.nickname,
+                        //     data : 
+                        //         {
+                        //             // detail : "teamChange On2",
+                        //             roomID : socket.roomID,
+                        //             room : socket.room,
+                        //             team: playerInfo.team,
+                        //             color:playerInfo.color,
+                        //             place : playerInfo.place,
+                        //             status: playerInfo.status
+                        //     },
+                        // });
                     }
 
                 }
@@ -908,23 +908,23 @@ module.exports = (io) => {
             console.log("updateSocketTeam : " ,socket.team);
 
             var playerInfo = await redis_room.getMember(socket.room, socket.userID);
-            lobbyLogger.info('waitingRoom:switch_team_on2_2 ', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        // detail : "teamChange On2",
-                        roomID : socket.roomID,
-                        room : socket.room,
-                        team: playerInfo.team,
-                        color:playerInfo.color,
-                        place : playerInfo.place,
-                        status: playerInfo.status
-                },
-            });
+            // lobbyLogger.info('waitingRoom:switch_team_on2_2 ', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             // detail : "teamChange On2",
+            //             roomID : socket.roomID,
+            //             room : socket.room,
+            //             team: playerInfo.team,
+            //             color:playerInfo.color,
+            //             place : playerInfo.place,
+            //             status: playerInfo.status
+            //     },
+            // });
         });
 
         // [WaitingRoom] WaitingRoom에서 나갈 시 (홈버튼 클릭)
@@ -974,19 +974,19 @@ module.exports = (io) => {
             // socket.broadcast.to(socket.room).emit('onGameStart');  //ver0
             io.sockets.in(socket.room).emit('onGameStart'); // ver1/
 
-            lobbyLogger.info('waitingRoom:game_start_on', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        roomID : socket.roomID,
-                        room : socket.room,
-                        team: playerInfo.team,
-                },
-            });
+            // lobbyLogger.info('waitingRoom:game_start_on', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             roomID : socket.roomID,
+            //             room : socket.room,
+            //             team: playerInfo.team,
+            //     },
+            // });
         });
 
         //  [WaitingRoom] GameStart로 모든 클라이언트의 on을 받는 함수로 팀별로 room join하여 씬 이동함 
@@ -1000,19 +1000,19 @@ module.exports = (io) => {
             // io.sockets.in(socket.room+'false').emit('onBlackGameStart');// ver2
             // io.sockets.in(socket.room+'true').emit('onWhiteGameStart');// ver2
         
-            lobbyLogger.info('waitingRoom:game_start_join_team', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : 
-                    {
-                        roomID : socket.roomID,
-                        room : socket.room,
-                        team: socket.team,
-                },
-            });
+            // lobbyLogger.info('waitingRoom:game_start_join_team', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : 
+            //         {
+            //             roomID : socket.roomID,
+            //             room : socket.room,
+            //             team: socket.team,
+            //     },
+            // });
         
         });
 
@@ -1783,19 +1783,19 @@ module.exports = (io) => {
             socket.to(socket.room+socket.team).emit("Update Chat", timestamp, socket.nickname, socket.color, chat);
             socket.emit("Update Chat", timestamp, socket.nickname, socket.color, chat);
 
-            chattingLogger.error('game:chatting', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {
-                    roomID : socket.roomID,
-                    room : socket.room,
-                    team : socket.team,
-                    chatting : chat
-                } 
-            });
+            // chattingLogger.error('game:chatting', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {
+            //         roomID : socket.roomID,
+            //         room : socket.room,
+            //         team : socket.team,
+            //         chatting : chat
+            //     } 
+            // });
         })
 
         socket.on("Is Abandon Company", async(companyName) => {
@@ -2228,14 +2228,14 @@ module.exports = (io) => {
                 await leaveRoom(socket, socket.room);
             }
             
-            lobbyLogger.info('mainHome:logout', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data : {status : 1} 
-            });
+            // lobbyLogger.info('mainHome:logout', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data : {status : 1} 
+            // });
 
             await sessionStore.deleteSession(socket.sessionID);
         });
@@ -2446,17 +2446,17 @@ module.exports = (io) => {
             // 4. (join삭제) 
             socket.leave(roomPin);
 
-            lobbyLogger.info('mainHome:delete_room', {
-                server : server_ip,
-                userIP : '192.0.0.1',
-                sessionID : socket.sessionID,
-                userID : socket.userID,
-                nickname : socket.nickname,
-                data :  {
-                    roomID : socket.roomID,
-                    room : socket.room,
-                }
-            });
+            // lobbyLogger.info('mainHome:delete_room', {
+            //     server : server_ip,
+            //     userIP : '192.0.0.1',
+            //     sessionID : socket.sessionID,
+            //     userID : socket.userID,
+            //     nickname : socket.nickname,
+            //     data :  {
+            //         roomID : socket.roomID,
+            //         room : socket.room,
+            //     }
+            // });
         }
         else{  // 나중에 if에 return 추가해서 else는 없애주기 
             // 1) roomManage room 인원 수정
@@ -2566,17 +2566,17 @@ module.exports = (io) => {
 
         }
         
-        lobbyLogger.info('mainHome:leave_room', {
-            server : server_ip,
-            userIP : '192.0.0.1',
-            sessionID : socket.sessionID,
-            userID : socket.userID,
-            nickname : socket.nickname,
-            data :  {
-                roomID : socket.roomID,
-                room : socket.room,
-            }
-        });
+        // lobbyLogger.info('mainHome:leave_room', {
+        //     server : server_ip,
+        //     userIP : '192.0.0.1',
+        //     sessionID : socket.sessionID,
+        //     userID : socket.userID,
+        //     nickname : socket.nickname,
+        //     data :  {
+        //         roomID : socket.roomID,
+        //         room : socket.room,
+        //     }
+        // });
     
 
         // 5. 나머지 room 관련 정보 socket에서 삭제 및 빈 값으로 수정해주기!!

@@ -49,10 +49,10 @@ const RoomInfo = require("./schemas/roomTotal/RoomInfo");
 const func = require('./server_functions/db_func');
 const {lobbyLogger, gameLogger, chattingLogger} = require('./logConfig'); 
 
-const os = require( 'os' );
-const { emit } = require('process');
-var networkInterfaces = os.networkInterfaces( );
-var server_ip = networkInterfaces['Wi-Fi'][1].address;
+// const os = require( 'os' );
+// const { emit } = require('process');
+// var networkInterfaces = os.networkInterfaces( );
+// var server_ip = networkInterfaces['Wi-Fi'][1].address;
 
 // 자바스크립트는 특정 문자열 인덱스 수정 불가라, 이를 대체하기 위해 가져온 함수
 String.prototype.replaceAt = function(index, replacement) {

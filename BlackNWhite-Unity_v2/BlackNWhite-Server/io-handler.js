@@ -46,7 +46,7 @@ const User = require("./schemas/roomTotal/User");
 const RoomInfo = require("./schemas/roomTotal/RoomInfo");
 
 // MongoDB관련
-const func = require('./server_functions/db_func');
+// const func = require('./server_functions/db_func');
 // const {lobbyLogger, gameLogger, chattingLogger} = require('./logConfig'); 
 
 // const os = require( 'os' );
@@ -3556,7 +3556,7 @@ module.exports = (io) => {
     // 게임 정보 저장 (mongoDB)
     var gameTotalJson = JSON.parse(await jsonStore.getjson(roomPin));
     var gameTotalScm = new RoomTotalSchema(gameTotalJson[0]);
-    func.InsertGameRoomTotal(gameTotalScm);
+    // func.InsertGameRoomTotal(gameTotalScm);
 
 
     // 룸 정보 저장 (mongoDB)
@@ -3594,7 +3594,7 @@ module.exports = (io) => {
         Users :roomMembersDict, 
         Info : roomInfoScm
     });
-    func.InsertRoomInfoTotal(roomTotalScm);
+    // func.InsertRoomInfoTotal(roomTotalScm);
 
     // 게임 정보 삭제 (redis)
     await jsonStore.deletejson(roomPin);

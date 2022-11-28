@@ -103,18 +103,14 @@ module.exports = (io) => {
                 username: socket.nickname,
                 connected: true,
             }).catch( 
-            function (error) {
-            console.log('catch handler', error);
+                function (error) {
+                console.log('catch handler', error);
             });
     
         }catch(error){
             console.log("ERROR! ", error);
             console.log("connect: saveSession");
-           
-        }
-
-        console.log("connect: saveSession");
-     
+        }     
 
         
         socket.on('checkSession', () => {
@@ -140,6 +136,7 @@ module.exports = (io) => {
             socket.emit('room permission',permission);
 
         });
+
 
         socket.on("randomGameStart", async() => {
             var roomPin, roomID; 
@@ -203,6 +200,7 @@ module.exports = (io) => {
 
 
         socket.on('add user', async() => {
+
             io.sockets.emit('Visible AddedSettings'); 
             var room = socket.room;
             var roomManageDict = await hashtableStore.getAllHashTable(room, 'roomManage'); 
@@ -281,7 +279,6 @@ module.exports = (io) => {
             var playerJson = JSON.stringify(playerInfo);
 
             io.sockets.in(socket.room).emit('updateUI',playerJson);
-
   
            if(readyUserCnt == maxPlayer){
                 io.sockets.in(socket.room).emit('countGameStart');
@@ -302,30 +299,29 @@ module.exports = (io) => {
                 rand_Color = profileColors.indexOf('0');
             }
             profileColors = profileColors.replaceAt(rand_Color, '1');
+
             socket.color = rand_Color;
        
             await hashtableStore.updateHashTableField(socket.room, 'profileColors', profileColors, 'roomManage');
 
+         
             playerInfo.color = rand_Color;
+   
 
             await redis_room.updateMember(socket.room, socket.userID, playerInfo);
             var playerJson = JSON.stringify(playerInfo);
 
-
-            io.sockets.in(socket.room).emit('updateUI',playerJson); 
+            io.sockets.in(socket.room).emit('updateUI',playerJson);
         });  
 
-
-
-      
         socket.on('changeTeamStatus',  async(changeStatus) =>{
             var room = socket.room;
+
             var playerInfo = await redis_room.getMember(room, socket.userID);
             playerInfo.status = changeStatus;
 
             await redis_room.updateMember(room, socket.userID, playerInfo);
             io.sockets.in(socket.room).emit('updateUI',JSON.stringify(playerInfo));
-
 
             var prevTeam = playerInfo.team; 
             var prevPlace = playerInfo.place;
@@ -347,14 +343,15 @@ module.exports = (io) => {
             
                     await hashtableStore.updateHashTableField(room, myWaitingField, mywaitingList.join(','), 'roomManage');
                 }
-
                
                 var playerJson = JSON.stringify(playerInfo);
                 socket.broadcast.to(socket.room).emit('updateUI', playerJson);
+
             }
            
             else if(changeStatus == 2){
                 var roomManageDict = await hashtableStore.getAllHashTable(room, 'roomManage'); 
+
                 var limitedUser = parseInt(roomManageDict.maxPlayer / 2);
                 if ((prevTeam == true &&  parseInt(roomManageDict.blackUserCnt) < limitedUser) || (prevTeam == false && parseInt(roomManageDict.whiteUserCnt) < limitedUser))
                 {                
@@ -365,17 +362,17 @@ module.exports = (io) => {
                     if(prevTeam){ 
                         -- roomManageDict.whiteUserCnt ; 
                         ++ roomManageDict.blackUserCnt ; 
-                    }else{
+                    } else{
                       
                         ++ roomManageDict.whiteUserCnt; 
                         -- roomManageDict.blackUserCnt ; 
                     }
-
                 
                     await hashtableStore.storeHashTable(room, roomManageDict, 'roomManage');
+  
                     await DeplaceUser(room, prevTeam, prevPlace);
                     playerInfo.place = await PlaceUser(room, !prevTeam);
-    
+      
                     await redis_room.updateMember(room, socket.userID, playerInfo);
 
                     var changeInfo = { 
@@ -414,6 +411,7 @@ module.exports = (io) => {
                         mywaitingList = []
                     }
            
+                 
      
                     if (otherswaitingList.length == 0){
                         mywaitingList.push(socket.userID);
@@ -448,6 +446,7 @@ module.exports = (io) => {
                         io.to(matePlayerInfo.socketID).emit('onTeamChangeType2');
 
                     }
+
                 }
             }
         });  
@@ -459,7 +458,8 @@ module.exports = (io) => {
 
      
         socket.on('leaveRoom', async()=> {
-             var roomPin = socket.room;
+            var roomPin = socket.room;
+         
             await leaveRoom(socket, roomPin);
         });
 
@@ -495,8 +495,10 @@ module.exports = (io) => {
 
       
         socket.on('joinTeam', async() => {
+
             socket.roomTeam = socket.room + socket.team.toString();
             socket.join(socket.roomTeam);
+
             socket.emit('loadMainGame', socket.team.toString()); //ver3
         });
 
@@ -504,6 +506,7 @@ module.exports = (io) => {
     
         socket.on('InitGame',  async() =>{
             let roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
+
             let abandonStatusList = [];
             for(let company of companyNameList){
                 abandonStatusList.push(roomTotalJson[0][company]["abandonStatus"]);
@@ -519,13 +522,14 @@ module.exports = (io) => {
                     userId.push(userID);
                 }
 
-            }else {
+            } else {
                 pitaNum = roomTotalJson[0]["blackTeam"]["total_pita"];
                 for (const userID in roomTotalJson[0]["blackTeam"]["users"]){
                     teamProfileJson[userID] = roomTotalJson[0]["blackTeam"]["users"][userID]["profileColor"];
                     userId.push(userID);
                 }
             }
+
 
             var room_data = { 
                 teamName : socket.team,
@@ -535,10 +539,13 @@ module.exports = (io) => {
             };
             var roomJson = JSON.stringify(room_data);
 
+
             socket.emit('MainGameStart', roomJson);
             socket.emit('Load Pita Num', pitaNum);
+            
             io.sockets.in(socket.room).emit('Company Status', abandonStatusList);
-            socket.emit('Visible LimitedTime', socket.team.toString()); // actionbar
+
+            socket.emit('Visible LimitedTime', socket.team.toString());
 
             var time = 600; 
             var min = "";
@@ -563,7 +570,6 @@ module.exports = (io) => {
                 }
             }, 1000);
 
-
             var pitaInterval= config.BLACK_INCOME.time * 1000; 
             pitaTimerId = setInterval(async function(){
                 const roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
@@ -580,8 +586,6 @@ module.exports = (io) => {
                 io.sockets.in(socket.room+'true').emit('Update Pita', white_total_pita);
     
             }, pitaInterval);
-
-
         });
         
  
@@ -599,11 +603,13 @@ module.exports = (io) => {
             var scenarioLvList = Object.values(roomTotalJson[0]["blackTeam"]["scenarioLevel"]);
             var scenarioLv = scenarioLvList[selectedScenario];
 
+
             if (scenarioLv >= 5){
                 socket.emit('ResultUpgradeScenario', false);
                 return;
             }
 
+          
             if (parseInt(black_total_pita) - parseInt(config.UPGRADE_SCENARIO.pita[scenarioLv]) < 0){
                 socket.emit('ResultUpgradeScenario', false);
                 return;
@@ -623,13 +629,16 @@ module.exports = (io) => {
          socket.on('TryBuyScenario',  async function(selectedScenario) {
             let roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
             var black_total_pita = roomTotalJson[0].blackTeam.total_pita;
+           
             var scenarioLvList = Object.values(roomTotalJson[0]["blackTeam"]["scenarioLevel"]);
             var scenarioLv = scenarioLvList[selectedScenario];
+
          
             if (scenarioLv != -1){
                 socket.emit('ResultBuyScenario', false);
                 return;
             }
+
          
             if (parseInt(black_total_pita) - parseInt(config.BUY_SCENARIO.pita[selectedScenario]) < 0){
                 socket.emit('ResultBuyScenario', false);
@@ -649,13 +658,17 @@ module.exports = (io) => {
         });
 
 
+      
         socket.on('GetSectAttScenario',  async function(data) {
             var scenarioLv = 0;
             var scenarioNum = data.scenario + 1;
             const roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
+            
+           
             var scenarioLvList = Object.values(roomTotalJson[0]["blackTeam"]["scenarioLevel"]);
 
             if (data.scenario != -1){
+              
                 scenarioLv = scenarioLvList[data.scenario];
                
                 var sectScenarioHint = { 
@@ -722,13 +735,14 @@ module.exports = (io) => {
             var scenarioLvList = Object.values(roomTotalJson[0]["blackTeam"]["scenarioLevel"]);
 
             scenarioLv = scenarioLvList[data.scenario];
-    
-          
+
             if(scenarioLv <= 2) return; 
            
             if(scenarioLv == 3){
                 var isAttacked = false;
+                
                 var sectionAttProgSenario = Object.values(roomTotalJson[0][data.company].sections[data.section].attackConn[0]);
+
                 var attackParents = [];
                 attackParents = config["SCENARIO" +scenarioNum].attackConnParent[data.attack];
 
@@ -737,12 +751,14 @@ module.exports = (io) => {
                         isAttacked = true;
                         break;
                     }
+                    
                 }
 
                 if (isAttacked == false){
                     return;
                 }
             } 
+
 
             var connectedAttHint = {};
             connectedAttHint['attack'] = data.attack;
@@ -754,7 +770,6 @@ module.exports = (io) => {
 
         
          socket.on('GetScenario',  async function(data) {
-            var scenarioLv = 0;
             var scenarioNum = data.scenario + 1;
         
             var scenarioHint = { 
@@ -762,23 +777,28 @@ module.exports = (io) => {
             };
 
             var attackHint = []; 
-            var progressAtt = [];
 
             for(let i = 0; i <= 13; i++){
                 attackHint[i] =  Object.values(config["SCENARIO" +scenarioNum].attacks[i]).length;
             }
             scenarioHint['attacksCnt'] = attackHint;
+    
+            
             scenarioHint['attacks']=  config["SCENARIO" +scenarioNum].attacks;
             scenarioHint['attackConn'] = config["SCENARIO" +scenarioNum].attackConn;
             scenarioHint['mainAttack'] = config["SCENARIO" +scenarioNum].mainAttack;
                
+        
             let scenarioHintJson = JSON.stringify(scenarioHint);
+
             socket.emit('SendScenario', scenarioHintJson);
         });
 
       
          socket.on('GetConnectedAttAll',  async function(data) {
             var scenarioNum = data.scenario + 1;
+
+         
             var connectedAttHint = {};
             connectedAttHint['attack'] = data.attack;
             connectedAttHint['connection'] = config["SCENARIO" +scenarioNum].attackConnDetail[data.attack];
@@ -1183,41 +1203,34 @@ module.exports = (io) => {
                 });
                 io.sockets.in(socket.room+'true').emit('Monitoring_Log', logArr, corpName);
                 let today = new Date();   
-                let hours = today.getHours(); // 시
-                let minutes = today.getMinutes();  // 분
-                let seconds = today.getSeconds();  // 초
+                let hours = today.getHours();
+                let minutes = today.getMinutes();
+                let seconds = today.getSeconds();
                 let now = hours+":"+minutes+":"+seconds;
                 var gameLog = {time: now, nickname: "", targetCompany: corpName, targetSection: "", detail: "Log analysis is complete."};
                 var logArr = [];
                 logArr.push(gameLog);
                 io.sockets.in(socket.room+'true').emit('addLog', logArr);
 
-                // 자동대응
-                // var sectionsArr = roomTotalJson[0][corpName].sections;
                 sectionsArr.forEach( async(element, sectionIdx) => {
                     var sectionDefenseProgressArr = element.defenseProgress;
                     var sectionDefenseActivationArr = element.defenseActive;
                     var defenseLv = element.defenseLv;
 
                     var sectionAttackData = element.attackProgress;
-                    sectionAttackData.forEach( async(attackElement) => {
-                        console.log(attackElement.tactic, attackElement.attackName);
-                        
+                    sectionAttackData.forEach( async(attackElement) => {                        
                         var tacticIndex = config.ATTACK_CATEGORY.indexOf(attackElement.tactic);
                         var techniqueIndex = config.ATTACK_TECHNIQUE[tacticIndex].indexOf(attackElement.attackName);
 
                         if (sectionDefenseActivationArr[tacticIndex][techniqueIndex] == 1){
                             var newInfo = { tactic: attackElement.tactic, attackName: attackElement.attackName, state: false }; 
                             sectionDefenseProgressArr[tacticIndex].push(newInfo);
-                            console.log("sectionDefenseProgressArr - Deactivation: ", sectionDefenseProgressArr);
-                            // 0은 나중에 시나리오 인덱스로 변경
                             DefenseCooltime(socket, newInfo.state, corpName, sectionIdx, tacticIndex, techniqueIndex, defenseLv[tacticIndex][techniqueIndex]);
                             socket.emit('Start Defense', corpName, sectionIdx, tacticIndex, techniqueIndex, config["DEFENSE_" + (tacticIndex + 1)]["time"][defenseLv[tacticIndex][techniqueIndex]]);
                         } else if (sectionDefenseActivationArr[tacticIndex][techniqueIndex] == 0) {
                             sectionDefenseActivationArr[tacticIndex][techniqueIndex] = 2;
                             let techniqueLevel = roomTotalJson[0][corpName]["sections"][sectionIdx]["defenseLv"];
                             socket.emit("Get Technique", corpName, sectionDefenseActivationArr, techniqueLevel);
-                            console.log("sectionDefenseActivationArr - Deactivation : ", sectionDefenseActivationArr);
                         }
 
                         await jsonStore.updatejson(roomTotalJson[0], socket.room);
@@ -1343,18 +1356,22 @@ module.exports = (io) => {
         socket.on('disconnect', async function() {
             clearInterval(timerId)
             clearInterval(pitaTimerId);
+
             
             if (socket.room){
                 await leaveRoom(socket, socket.room);
             }
-            
+
             await sessionStore.deleteSession(socket.sessionID);
         });
     })
 
 
+    // [room] 방 키 5자리 랜덤 
     function randomN(){
         var randomNum = {};
+
+        //0~9까지의 난수
         randomNum.random = function(n1, n2) {
             return parseInt(Math.random() * (n2 -n1 +1)) + n1;
         };
@@ -1389,14 +1406,14 @@ module.exports = (io) => {
     async function PlaceUser(roomPin, team){
         var userPlacementName ;
 
-        if(!team){ 
+        if(!team){
             userPlacementName =  'blackPlacement';
         }else{
             userPlacementName =  'whitePlacement';
-        } 
+        }
 
         var userPlacement =await hashtableStore.getHashTableFieldValue(roomPin, [userPlacementName], 'roomManage');
-     
+
         if(!userPlacement)
         {
             return -1
@@ -1404,17 +1421,17 @@ module.exports = (io) => {
 
         userPlacement = userPlacement[0].split('');
         var place =  userPlacement.pop();
+
         var newUserPlacement =  userPlacement.join('');
         await hashtableStore.updateHashTableField(roomPin, userPlacementName, newUserPlacement, 'roomManage');
       
         return place
     }
 
-
     async function DeplaceUser(roomPin, prevTeam, idx){
         var userPlacementName ;
 
-        if(!prevTeam){ 
+        if(!prevTeam){
             userPlacementName =  'blackPlacement';
         }else{
             userPlacementName =  'whitePlacement';
@@ -1423,8 +1440,8 @@ module.exports = (io) => {
         var userPlacement = await hashtableStore.getHashTableFieldValue(roomPin, [userPlacementName], 'roomManage');
         userPlacement = userPlacement[0].split('');
         userPlacement.push(idx);
+
         userPlacement =  userPlacement.join('');
-    
     }
 
     async function createRoom(roomType, maxPlayer){
@@ -1434,6 +1451,7 @@ module.exports = (io) => {
         {
             roomPin = randomN();
         }
+
 
         var creationDate = nowDate();
 
@@ -1447,7 +1465,6 @@ module.exports = (io) => {
 
         await redis_room.createRoom(roomPin, room_info);
 
-   
         var room_info_redis = {
             'roomID' : roomID,
             'roomType' : roomType,
@@ -1485,34 +1502,27 @@ module.exports = (io) => {
         return 1
     };
 
-
-    async function switchTeamType1(socket, playerInfo){
-
-    };
-
-
     async function leaveRoom(socket, roomPin){
         if (await redis_room.RoomMembers_num(roomPin) <= 1){
             console.log("[룸 삭제]!");
-            redis_room.deleteRooms(roomPin); 
-
-            var redisroomKey = await hashtableStore.getHashTableFieldValue(roomPin, ['roomType'], 'roomManage'); 
-  
+            redis_room.deleteRooms(roomPin);
+            var redisroomKey = await hashtableStore.getHashTableFieldValue(roomPin, ['roomType'], 'roomManage');
+              
             socket.emit('logout'); 
+
             socket.broadcast.to(roomPin).emit('userLeaved',socket.userID);  
+    
             socket.leave(roomPin);
         }
-        else{  
+        else{
             var userInfo = await redis_room.getMember(socket.room, socket.userID);
-          
             if (socket.team){
-                await DeplaceUser(roomPin, socket.team, userInfo.place); 
+                await DeplaceUser(roomPin, socket.team, userInfo.place);
             }else{
-                await DeplaceUser(roomPin, socket.team, userInfo.place); 
+                await DeplaceUser(roomPin, socket.team, userInfo.place);
             }
             
             var roomManageInfo = await hashtableStore.getAllHashTable(roomPin, 'roomManage'); ;
-
             roomManageInfo.userCnt = roomManageInfo.userCnt - 1;
 
             var othersWaitingField, myWaitingField;
@@ -1526,16 +1536,15 @@ module.exports = (io) => {
                 othersWaitingField = 'toBlackUsers';
             }
           
-          
             if(roomManageInfo[myWaitingField].length != 0){
                 var mywaitingList = roomManageInfo[myWaitingField].split(',');
                 roomManageInfo[myWaitingField] = mywaitingList.filter(function(userID) {
                     return userID != socket.userID;
                 });
             }
-          
+
             roomManageInfo.profileColors = roomManageInfo.profileColors.replaceAt(socket.color, '0');
-    
+
             if(userInfo.status == 1){
                 roomManageInfo.readyUserCnt -= 1 ;
             }
@@ -1551,11 +1560,9 @@ module.exports = (io) => {
     
             socket.leave(roomPin);
 
-            
             var otherswaitingList;
             if(roomManageInfo[othersWaitingField].length != 0){
                 otherswaitingList = othersWaitingData[0].split(',');
-
                 var mateUserID = otherswaitingList.shift();
                 var matePlayerInfo = await redis_room.getMember(room, mateUserID);
 
@@ -1569,10 +1576,8 @@ module.exports = (io) => {
                     player1 : matePlayerInfo
                 };
                 
-               
                 io.sockets.in(socket.room).emit('updateTeamChange', JSON.stringify(teamChangeInfo));
             }
-
 
             var redisroomKey =  roomManageInfo.roomType + 'Room';
             var publicRoomList = await listStore.rangeList(redisroomKey, 0, -1, 'roomManage');
@@ -1580,7 +1585,6 @@ module.exports = (io) => {
             if (!publicRoomList.includes(roomPin) && (await redis_room.RoomMembers_num(roomPin) <= JSON.parse(await redis_room.getRoomInfo(roomPin)).maxPlayer)){
                 await listStore.rpushList(redisroomKey, roomPin, false, 'roomManage');
             }
-
         }
         
         socket.room = null;
@@ -1625,7 +1629,6 @@ module.exports = (io) => {
                         level  : 1,
                         suspicionCount : 1,
                         attackProgress : [],
-                        // attackSenarioProgress  : [ ['Gather Victim Network Information', 'Exploit Public-Facing Application', 'Phishing'] ],
                         attackSenarioProgress  : [[], [], [], [], []],
                         defenseProgress : [[], [], [], [], []],
                         beActivated : [],
@@ -2088,24 +2091,16 @@ module.exports = (io) => {
         return RoomTotalJson
     }
 
-    // Attack 쿨타임
     async function AttackCoolTime(socket, lvCoolTime, corpName, sectionIdx, tacticIdx, attackLv, tacticName, attackName){
-        console.log("attack 쿨타임 시작 - 서버",lvCoolTime );
         var attackTime = setTimeout(async function(){
-            console.log("attack 쿨타임 종료 - 서버");
 
             let prob = config["ATTACK_" + (tacticIdx + 1)]["success"][attackLv] * 0.01;
             let percent = Math.random();
-            console.log("prob : ", prob, ", percent : ", percent); 
-            prob = 1; // test
 
-            // 공격 성공 (by.성공률)
             if (prob >= percent) {
                 let roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
                 var attackProgressArr = roomTotalJson[0][corpName].sections[sectionIdx].attackProgress;
-                console.log("attackProgressArr<< ", attackProgressArr);
     
-                // state 2로 변경
                 attackProgressArr.filter( async (element) => {
                     if(element.attackName == attackName && element.state == 1) {
                         element.state = 2;
@@ -2114,16 +2109,11 @@ module.exports = (io) => {
 
                 roomTotalJson[0][corpName].sections[sectionIdx].attackProgress = attackProgressArr;
                 await jsonStore.updatejson(roomTotalJson[0], socket.room);
-    
-                const roomTotalJson2 = JSON.parse(await jsonStore.getjson(socket.room));
-                var sectionAttackProgressArr2 = roomTotalJson2[0]["companyA"].sections[0].attackProgress;
-                console.log("state2 test: ", sectionAttackProgressArr2);
 
-                // [GameLog] 로그 추가
                 let today = new Date();   
-                let hours = today.getHours(); // 시
-                let minutes = today.getMinutes();  // 분
-                let seconds = today.getSeconds();  // 초
+                let hours = today.getHours();
+                let minutes = today.getMinutes();
+                let seconds = today.getSeconds();
                 let now = hours+":"+minutes+":"+seconds;
                 var gameLog = {time: now, nickname: socket.nickname, targetCompany: corpName, targetSection: areaNameList[sectionIdx], detail: attackName+" is completed."};
 
@@ -2131,38 +2121,18 @@ module.exports = (io) => {
                 logArr.push(gameLog);
                 io.sockets.in(socket.room+'false').emit('addLog', logArr);
 
-                // 시나리오 포함 여부 확인 함수 호출
-                CheckScenarioAttack(socket, corpName, sectionIdx, tacticName, attackName); 
-
-                // if(attackProgressArr[attackIdx].state == 1) {
-                //     attackProgressArr[attackIdx].state = 2;
-                //     await jsonStore.updatejson(roomTotalJson[0], socket.room);
-    
-                //     const roomTotalJson2 = JSON.parse(await jsonStore.getjson(socket.room));
-                //     var sectionAttackProgressArr2 = roomTotalJson2[0]["companyA"].sections[0].attackProgress;
-                //     console.log("test: ", sectionAttackProgressArr2);
-                // }
-
-            // 공격 실패 (by.성공률)
+                CheckScenarioAttack(socket, corpName, sectionIdx, tacticName, attackName);
             } else{
-                console.log("Failed due to success rate!!");
                 socket.emit('Failed to success rate');
 
                 let roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
                 var attackProgressArr = roomTotalJson[0][corpName].sections[sectionIdx].attackProgress;
-                console.log("attackProgressArr<< ", attackProgressArr);
 
-                // state 1인 해당 공격 attackProgress에서 제거
                 attackProgressArr.filter(async (element, index) => {
                     if(element.attackName == attackName && element.state == 1) {
                         attackProgressArr.splice(index, 1);
-                        console.log("state 1 remove >> ", attackProgressArr);
 
                         await jsonStore.updatejson(roomTotalJson[0], socket.room);
-    
-                        const roomTotalJson2 = JSON.parse(await jsonStore.getjson(socket.room));
-                        var sectionAttackProgressArr2 = roomTotalJson2[0]["companyA"].sections[0].attackProgress;
-                        console.log("delete test: ", sectionAttackProgressArr2);
                     }
                 });
 
@@ -2178,47 +2148,30 @@ module.exports = (io) => {
         var attackProgress = roomTotalJson[0][corpName].sections[sectionIdx].attackProgress;
         var attackConn = roomTotalJson[0][corpName].sections[sectionIdx].attackConn;
         
-        // startAttack인지 확인
         for (var i = 0; i < attackConn.length; i++) {
             var scenarioName = "SCENARIO" + (i + 1);
             var startAttackArr = (Object.values(config[scenarioName].startAttack));
-            console.log("startAttackArr : ", startAttackArr);
-            console.log("attackName : ", attackName);
-
 
             if(startAttackArr.includes(attackName)) {
-                console.log("start attack!!");
                 var newInfo = { tactic: tacticName, attackName: attackName }; 
                 attackSenarioProgressArr[i].push(newInfo);
                 attackConn[i]["startAttack"][attackName] = true;
                 socket.emit('Attack Success');
-                console.log("attackConn : ", attackConn);
             } else {
-                console.log("not start attack!!");
                 for(key in attackConn[i]) {
                     var attackConnArr = (Object.keys(attackConn[i][key]));
                     if (attackConnArr.includes(attackName)) {
-                        console.log("키 존재 attack!! : ", attackName);
                         if (attackConnArr[attackName] == true) {
-                            console.log("키 값이 true attack!!");
                             var newInfo = { tactic: tacticName, attackName: attackName }; 
                             attackSenarioProgressArr[i].push(newInfo);
                             socket.emit('Attack Success');
                         } else {
-                            console.log("키 값이 false attack!!");
-                            // 나중에 tactic도 같이 필터링해줄 수 있는 방법 찾아야 됨
                             var attackInfo = attackProgress.filter(function(progress){
                                 return progress.attackName == attackName && progress.tactic == tacticName;
                             })[0];
-
-                            console.log("attackProgress : ", attackProgress);
-                            console.log("attackInfo : ", attackInfo);
-                            console.log("attackName : ", attackName);
-                            console.log("tacticName : ", tacticName);
                             
                             if (typeof attackInfo != "undefined" && attackInfo.state == 2) {
                                 var parents = config[scenarioName].attackConnParent[key];
-                                console.log("parents : ", parents);
 
                                 if (typeof parents != "undefined" && parents.length > 0){ 
                                     for (var pIdx = 0; pIdx < parents.length; pIdx++) {
@@ -2237,7 +2190,6 @@ module.exports = (io) => {
                                                 roomTotalJson[0][corpName].sections[sectionIdx].destroyStatus = true;
                                                 roomTotalJson[0][corpName].sections[sectionIdx+1].attackable = true;
                                             }
-
                                             break;
                                         }
                                     }
@@ -2435,55 +2387,28 @@ module.exports = (io) => {
 
 
   async function SaveDeleteGameInfo(roomPin){        
-    // 게임 정보 저장 (mongoDB)
     var gameTotalJson = JSON.parse(await jsonStore.getjson(roomPin));
     var gameTotalScm = new RoomTotalSchema(gameTotalJson[0]);
-    // func.InsertGameRoomTotal(gameTotalScm);
 
-
-    // 룸 정보 저장 (mongoDB)
-    // 해당 룸의 모든 사용자 정보 가져와 new user 정보 추가 후 update
     var roomMembersList =  await redis_room.RoomMembers(roomPin);
     var roomMembersDict = {}
 
     var user;
     for (const member of roomMembersList){
-        // roomMembersDict[member] = await redis_room.getMember(room, member);
         user = await redis_room.getMember(roomPin, member);
-
-        // roomMembersDict[member] = ({
-        //     new BlackUsers(
-        //     userID   : user.userID,
-        //     nickname : user.nickname,
-        //     team : user.team,
-        //     status : user.status,
-        //     color : user.color,
-        //     place : user.place,
-        //     socketID : user.socketID,
-        // });
         roomMembersDict[member] = new User(user);
     }   
-    console.log('!!!~~roomMembersDict', roomMembersDict);
 
-    // roomInfo 정보
     var roomInfo = JSON.parse(await redis_room.getRoomInfo(roomPin));
-    console.log('!!!~~roomInfo', roomInfo);
     var roomInfoScm = new RoomInfo(roomInfo);
-    console.log('!!!~~roomInfoScm', roomInfoScm);
 
-    // 합치기 
     var roomTotalScm = new RoomInfoTotal({
         Users :roomMembersDict, 
         Info : roomInfoScm
     });
-    // func.InsertRoomInfoTotal(roomTotalScm);
 
-    // 게임 정보 삭제 (redis)
     await jsonStore.deletejson(roomPin);
-
-     // 룸 정보 삭제 (redis)
     redis_room.deleteRooms(roomPin); 
   }
-    
 }
 

@@ -1271,7 +1271,6 @@ module.exports = (io) => {
 
 
         socket.on('click_technique_button', async(data, attackName, tacticName) => {
-            console.log("wasd >> ", attackName, tacticName);
             if(attackName.includes("\n")) { attackName = attackName.substring(1); }
 
             const roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
@@ -1334,8 +1333,7 @@ module.exports = (io) => {
                 await jsonStore.updatejson(roomTotalJson[0], socket.room);
 
                 io.sockets.in(socket.room+'true').emit('Issue_Count_Update', corpName);
-                AttackCoolTime(socket, (lvCoolTime*1000), corpName, sectionIdx, tacticIdx, attackLv, tacticName, attackName); // (socket, corpName, sectionIdx, attackIdx, tacticIdx, attackLv, tacticName, attackName)
-
+                AttackCoolTime(socket, (lvCoolTime*1000), corpName, sectionIdx, tacticIdx, attackLv, tacticName, attackName); 
             }
         });
 
@@ -1353,11 +1351,9 @@ module.exports = (io) => {
     })
 
 
-    // [room] 방 키 5자리 랜덤 
     function randomN(){
         var randomNum = {};
 
-        //0~9까지의 난수
         randomNum.random = function(n1, n2) {
             return parseInt(Math.random() * (n2 -n1 +1)) + n1;
         };
@@ -1490,7 +1486,6 @@ module.exports = (io) => {
 
     async function leaveRoom(socket, roomPin){
         if (await redis_room.RoomMembers_num(roomPin) <= 1){
-            console.log("[룸 삭제]!");
             redis_room.deleteRooms(roomPin);
             var redisroomKey = await hashtableStore.getHashTableFieldValue(roomPin, ['roomType'], 'roomManage');
               

@@ -1,8 +1,3 @@
-const url = require('url');
-const async = require('async');
-
-const { Socket } = require('dgram');
-const { stringify } = require('querystring');
 const config = require('./configure');
 
 const REDIS_PORT = 6379;
@@ -35,7 +30,6 @@ const BlackUsers = require("./schemas/roomTotal/BlackUsers");
 const WhiteUsers = require("./schemas/roomTotal/WhiteUsers");
 const Company = require("./schemas/roomTotal/Company");
 const Section = require("./schemas/roomTotal/Section");
-const Progress = require("./schemas/roomTotal/Progress");
 
 const RoomInfoTotal = require("./schemas/roomTotal/RoomInfoTotal");
 const User = require("./schemas/roomTotal/User");
@@ -52,14 +46,6 @@ String.prototype.replaceAt = function(index, replacement) {
 
 module.exports = (io) => {
     
-    var gameserver = io.of("blacknwhite");
- 
-    var rooms ={};  
-    var userPlacement ={}; 
-    let Players = [];
-    let gamePlayer = {};
-    let evenNumPlayer = false;
-    let numPlayer = 1;
     let companyNameList = ["companyA", "companyB", "companyC", "companyD", "companyE"];
     let taticNamesList = ["Reconnaissance", "Resource Development", "Initial Access", "Execution", "Persistence", "Privilege Escalation", "Defense Evasion", "Credential Access", "Discovery", "Lateral Movement", "Collection", "Command and Control", "Exfiltration", "Impact"];
     let areaNameList = ["DMZ", "Internal", "Security"]
@@ -2387,9 +2373,6 @@ module.exports = (io) => {
 
 
   async function SaveDeleteGameInfo(roomPin){        
-    var gameTotalJson = JSON.parse(await jsonStore.getjson(roomPin));
-    var gameTotalScm = new RoomTotalSchema(gameTotalJson[0]);
-
     var roomMembersList =  await redis_room.RoomMembers(roomPin);
     var roomMembersDict = {}
 
@@ -2400,12 +2383,6 @@ module.exports = (io) => {
     }   
 
     var roomInfo = JSON.parse(await redis_room.getRoomInfo(roomPin));
-    var roomInfoScm = new RoomInfo(roomInfo);
-
-    var roomTotalScm = new RoomInfoTotal({
-        Users :roomMembersDict, 
-        Info : roomInfoScm
-    });
 
     await jsonStore.deletejson(roomPin);
     redis_room.deleteRooms(roomPin); 

@@ -1285,7 +1285,6 @@ module.exports = (io) => {
 
 
         socket.on('click_technique_button', async(data, attackName, tacticName) => {
-            console.log("wasd >> ", attackName, tacticName);
             if(attackName.includes("\n")) { attackName = attackName.substring(1); }
 
             const roomTotalJson = JSON.parse(await jsonStore.getjson(socket.room));
@@ -1504,7 +1503,6 @@ module.exports = (io) => {
 
     async function leaveRoom(socket, roomPin){
         if (await redis_room.RoomMembers_num(roomPin) <= 1){
-            console.log("[룸 삭제]!");
             redis_room.deleteRooms(roomPin);
             var redisroomKey = await hashtableStore.getHashTableFieldValue(roomPin, ['roomType'], 'roomManage');
               

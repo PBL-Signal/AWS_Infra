@@ -1,11 +1,7 @@
-// Configure File
 module.exports = {
     TOTAL_PITA : 100,
-
-    // 상의 후 수정 필요 (테스트용)
     ATTACK_UPGRADE_NUM : [1, 2, 3, 4, 5],
 
-    // 공격
     ATTACK_1 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Reconnaissance"},
     ATTACK_2 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Resource Development"},
     ATTACK_3 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Initial Access"},
@@ -21,7 +17,6 @@ module.exports = {
     ATTACK_13 : { pita : [5, 6, 7, 8, 9], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Exfiltration"},
     ATTACK_14 : { pita : [5, 6, 7, 8, 9], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Impact"},
 
-    //대응 (나중에 tactic이랑 technique를 분리해야 함)
     DEFENSE_1 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Reconnaissance"},
     DEFENSE_2 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Resource Development"},
     DEFENSE_3 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], success : [40, 50, 60, 70, 80], name : "Initial Access"},
@@ -40,7 +35,6 @@ module.exports = {
     DEFENSE_UPGRADE : [0, 20, 40, 60, 80, 100],
     DEFENSE_TECHNIQUE_UPGRADE : [0, 2, 4, 6, 8, 10],
 
-    // 관제 시간
     MONITORING_1 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], name : "Reconnaissance"},
     MONITORING_2 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], name : "Resource Development"},
     MONITORING_3 : { pita : [1, 2, 3, 4, 5], time : [9, 7, 6, 5, 4], name : "Initial Access"},
@@ -56,77 +50,44 @@ module.exports = {
     MONITORING_13 : { pita : [5, 6, 7, 8, 9], time : [9, 7, 6, 5, 4], name : "Exfiltration"},
     MONITORING_14 : { pita : [5, 6, 7, 8, 9], time : [9, 7, 6, 5, 4], name : "Impact"},
     
-    GAME_TIME : 30, // 현재 단위 분, 추후 수정
+    GAME_TIME : 30,
     MAX_LEVEL : 5,
     BLACK_MIN_LEVEL : 0,
     WHITE_MIN_LEVEL : 1,
     
     WARNING_CNT : 3,
-    
-    // 사후관리
+
     UNBLOCK_INFO : { pita : 50, time : [15, 14, 13, 12, 11] },
     DETECTION_CNT_PER_LEVEL : [6, 5, 4, 3, 2],
-    
-    // 영역과 공격의 레벨 차에 따른 지연 시간
+
     DELAY_TIME_PERCENT : [1, 1.5, 1.8, -1, -1],
-    
-    // 유지보수
+
     MAINTENANCE_SECTION_INFO : { pita : [40, 80, 120, 200, 320] },
 
-    // 로그 분석(공격 개수 당 피타)
     ANLAYZE_PER_ATTACKCNT : 3,
-    
-    // 사전탐색
+
     EXPLORE_INFO : { pita : 10, time : 10 },
-    
-    // 수입원
+
     BLACK_INCOME : { pita : 50, time : 10 },
     WHITE_INCOME : { pita : 100, time : 10 },
-    
-    // 방 생성 인원 기본 값
+
     DEFAULT_ROOM : { maxPlayer : 8 },
-    // 대기룸 maxPlayer에 따른 UI 위치 
+
     ALLOCATE_PLAYER_UI : { 2 : '1', 4 : '21', 6 : '321', 8 : '4321'},
 
-    // 게임 시작시 제출 호두
     DUES_HODU : 100,
 
-    // 승리팀 획득 호두
     WIN_HODU : 200,
 
-    // 패배팀 획득 호두
     LOSE_HODU : 100,
 
-    // 무승부 획득 호두
     TIE_HODU : 150,
 
-    // 승패 결정 기준(몰락된 회사 갯수)
     BENCHMARK: 3,
 
-    // const COMPANY_1 = { name : "" , sectionVuln=Rand_Vuln(sectionNum) }; // section 인덱스 = 영역 idx
-    // const COMPANY_2 = { name : "" , section=["ATTACK_2", "ATTACK_3",  "ATTACK_1"] };
-    
-    /*
-    function Rand_Vuln(Numsection){
-        var vulnArr = [];
-    
-        for(var i=0; i<Numsection; i++) {
-                parseInt(Math.random() * 4)
-                vulnArr.append("ATTACK_" + i.)
-        }
-    
-        return vulnArr
-    }
-    */
-
-   /**
-    *  버전 2 configure
-    */
-    // BUY_SCENARIO: { pita : [100, 1100, 1200, 1300, 1400] },
-    // UPGRADE_SCENARIO : { pita : [50, 100, 200, 300, 400] }, // 블랙팀 - 사전 탐색 (어택 시나리오) 0->1 : 50 pita
 
     BUY_SCENARIO: { pita : [10, 10, 1200, 1300, 1400] },
-    UPGRADE_SCENARIO : { pita : [10, 10, 10, 10, 10] }, // 블랙팀 - 사전 탐색 (어택 시나리오) 0->1 : 50 pita
+    UPGRADE_SCENARIO : { pita : [10, 10, 10, 10, 10] }, 
             
     SCENARIO1 :{
         'attacks': {
@@ -229,7 +190,7 @@ module.exports = {
             ]
         },
 
-        'attackConnParent': // 키 : 자식 공격, 값 : 자식과 연결 부모 공격들
+        'attackConnParent': 
         {
             'Exploit Public-Facing Application' : ['Gather Victim Network Information'],
             'Phishing' : ['Gather Victim Network Information'],
@@ -381,7 +342,7 @@ module.exports = {
             ]
         },
 
-        'attackConnParent': // 키 : 자식 공격, 값 : 자식과 연결 부모 공격들
+        'attackConnParent':
         {
             "Drive-by Compromise" : [ "Obtain Capabilities" ],
             "Native API" : ["Obtain Capabilities","Drive-by Compromise"],
@@ -548,7 +509,7 @@ module.exports = {
             ]
         },
 
-        'attackConnParent': // 키 : 자식 공격, 값 : 자식과 연결 부모 공격들
+        'attackConnParent': 
         {
             "Develop Capabilities" : ["Search Victim-Owned Websites"],
             "Exploit Public-Facing Application" : ["Gather Victim Org Information","Develop Capabilities" ],
@@ -672,7 +633,7 @@ module.exports = {
             ],
         },
 
-        'attackConnParent': // 키 : 자식 공격, 값 : 자식과 연결 부모 공격들
+        'attackConnParent':
         {
             "Native API" : ["Drive-by Compromise"],
             "Modify Registry" : ["Native API"],
@@ -798,7 +759,7 @@ module.exports = {
             ],
         },
 
-        'attackConnParent': // 키 : 자식 공격, 값 : 자식과 연결 부모 공격들
+        'attackConnParent': 
         {
             "Windows Management Instrumentation" : ["Drive-by Compromise", "Exploit Public-Facing Application"],
             "Scheduled Task/Job" : ["Windows Management Instrumentation"],

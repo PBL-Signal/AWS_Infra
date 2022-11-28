@@ -17,23 +17,19 @@ const jsonStore = new RedisJsonStore(redisClient);
 const { redisListStore } = require("./redisListStore");
 const listStore = new redisListStore(redisClient);
 
-const { RedisRoomStore, InMemoryRoomStore } = require("./roomStore");
+const { RedisRoomStore } = require("./roomStore");
 const redis_room = new RedisRoomStore(redisClient);
 
 const crypto = require("crypto");
 const randomId = () => crypto.randomBytes(8).toString("hex");
 
-const RoomTotalSchema = require("./schemas/roomTotal/RoomTotalSchema");
 const BlackTeam = require("./schemas/roomTotal/BlackTeam");
 const WhiteTeam = require("./schemas/roomTotal/WhiteTeam");
 const BlackUsers = require("./schemas/roomTotal/BlackUsers");
 const WhiteUsers = require("./schemas/roomTotal/WhiteUsers");
 const Company = require("./schemas/roomTotal/Company");
 const Section = require("./schemas/roomTotal/Section");
-
-const RoomInfoTotal = require("./schemas/roomTotal/RoomInfoTotal");
 const User = require("./schemas/roomTotal/User");
-const RoomInfo = require("./schemas/roomTotal/RoomInfo");
 
 
 String.prototype.replaceAt = function(index, replacement) {
@@ -125,7 +121,7 @@ module.exports = (io) => {
 
 
         socket.on("randomGameStart", async() => {
-            var roomPin, roomID; 
+            var roomPin; 
             var publicRoomCnt = await listStore.lenList('publicRoom', 'roomManage');
 
             if(publicRoomCnt > 0){    
@@ -2376,8 +2372,6 @@ module.exports = (io) => {
         user = await redis_room.getMember(roomPin, member);
         roomMembersDict[member] = new User(user);
     }   
-
-    var roomInfo = JSON.parse(await redis_room.getRoomInfo(roomPin));
 
     await jsonStore.deletejson(roomPin);
     redis_room.deleteRooms(roomPin); 

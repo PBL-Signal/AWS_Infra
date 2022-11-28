@@ -9,11 +9,6 @@ const app = express();
 const server = http.createServer(app);
 app.use(cors());
 app.use(express.json());
-// app.use(express.static(path.join(__dirname, 'client/rsp/build')));
-
-// app.get('*', function(req, res){
-//     res.sendFile(path.join(__dirname, '/client/rsp/build/index.html'));
-// })
 
 const WORKERS_COUNT = 4;
 
@@ -29,9 +24,8 @@ if (cluster.isMaster) {
       cluster.fork();
     });
   
-    //const httpServer = http.createServer();
     setupMaster(server, {
-      loadBalancingMethod: "least-connection", // either "random", "round-robin" or "least-connection"
+      loadBalancingMethod: "least-connection", 
     });
 
     const PORT = process.env.PORT || 8080;

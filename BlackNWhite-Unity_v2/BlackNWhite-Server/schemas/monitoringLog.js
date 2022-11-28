@@ -1,4 +1,3 @@
-// schemas/room.js
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -13,6 +12,3 @@ const monitoringLog = new Schema({
 
 
 module.exports = mongoose.model('monitoringLog', monitoringLog);
-
-
-// 시간 누구 회사 섹션 관제/공격/대응 디테일
